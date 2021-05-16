@@ -1,16 +1,12 @@
 #!/usr/bin/node
-$( document ).ready(function () {
-  const amenity_id = {};
-  $("INPUT").change(function () {
-    if($(this).prop("checked")) {
-      amenity_id[$(this).attr("data-id")] = $(this).attr("data-name");
+$(document).ready(function () {
+  const amenityId = {};
+  $('INPUT').change(function () {
+    if ($(this).prop('checked')) {
+      amenityId[$(this).attr('data-id')] = $(this).attr('data-name');
     } else {
-      delete amenity_id[$(this).attr("data-id")];
+      delete amenityId[$(this).attr('data-id')];
     }
-    for (const key in amenity_id)
-    {
-      let name = amenity_id[key]
-      $('DIV.amenities h4').text(name)
-    }
+    $('DIV.amenities h4').text(Object.values(amenityId).join(', '));
   });
 });
