@@ -10,7 +10,7 @@ $(document).ready(function () {
     $('DIV.amenities h4').text(Object.values(amenityId).join(', '));
   });
 
-  $.get('http://0.0.0.0:5001/api/v1/status/', function (data, status) {
+  $.get('http://localhost:5001/api/v1/status/', function (data, status) {
     if (status === 'success') {
       $('DIV#api_status').addClass('available');
     } else {
@@ -22,10 +22,14 @@ $(document).ready(function () {
     type: "POST",
     url: 'http://localhost:5001/api/v1/places_search/',
     contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: {},
+    dataType: '{}',
+    data: 'json',
     success: function(data){
-      alert('junk');
+      console.log(data);
+      for (const place in data) {
+        article = '<div class="title_box"><h2>' + place.name + '</h2>';
+      $('.places').append(article);
+      }
     }
   });
 });
