@@ -10,7 +10,7 @@ $(document).ready(function () {
     $('DIV.amenities h4').text(Object.values(amenityId).join(', '));
   });
 
-  $.get('http://localhost:5001/api/v1/status/', function (data, status) {
+  $.get('http://0.0.0.0:5001/api/v1/status/', function (data, status) {
     if (status === 'success') {
       $('DIV#api_status').addClass('available');
     } else {
@@ -19,16 +19,27 @@ $(document).ready(function () {
   });
 
   $.ajax({
-    type: "POST",
-    url: 'http://localhost:5001/api/v1/places_search/',
-    contentType: "application/json; charset=utf-8",
-    dataType: '{}',
-    data: 'json',
-    success: function(data){
-      console.log(data);
-      for (const place in data) {
-        article = '<div class="title_box"><h2>' + place.name + '</h2>';
-      $('.places').append(article);
+    type: 'POST',
+    url: 'http://0.0.0.0:5001/api/v1/places_search/',
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    data: '{}',
+    success: function (data, status) {
+      for (const object in data) {
+        let display;
+        const titleBox = `<article><div class="title_box"><h2>${data[object].name}</h2><div class="price_by_night">$${data[object].price_by_night}</div></div>`;
+        /* ===GUESTS=== */
+        display = (data[object].max_guest > 1) ? 'Guests' : 'Guest';
+        const infoGuest = `<div class="information"><div class="max_guest">${data[object].max_guest} ${display}</div>`;
+        /* ===ROOMS=== */
+        display = (data[object].number_rooms > 1) ? 'Bedrooms' : 'Bedroom';
+        const infoRoom = `<div class="number_rooms">${data[object].number_rooms} ${display}</div>`;
+        /* ===BATHROOMS=== */
+        display = (data[object].number_bathrooms > 1) ? 'Bathrooms' : 'Bathroom';
+        const infoBath = `<div class="number_bathrooms">${data[object].number_bathrooms} ${display}</div></div>`;
+        const desc = `<div class="description">${data[object].description}</div></article>`;
+        const finalHtml = titleBox + infoGuest + infoRoom + infoBath + desc;
+        $('SECTION.places').append(finalHtml);
       }
     }
   });
